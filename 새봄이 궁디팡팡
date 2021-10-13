@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let counter = 0;
+            let isConnect = false;
+            let src = "img\\흰바탕.PNG";
+
+            const h1 = document.querySelector("h1");
+            const  p = document.querySelector("p");
+            const result = document.querySelector("#result");
+            const connectButton = document.querySelector("#connect");
+            const disConnectButton = document.querySelector("#disconnect");
+
+            // # 궁디팡팡
+            // 콜백 함수(이벤트 리스너)
+            const listener = (event) => {
+                h1.textContent = `궁디팡팡 : ${counter++}`;
+            }
+            // 이벤트를 제거하려면 이벤트 리스너를 변수 또는 상수로 가지고 있어야 한다.
+
+            // # 시작
+            // 버튼을 클릭 했을 때 연결이 안되어 있으면 연결한다.
+            connectButton.addEventListener('click', () => {
+                if(isConnect === false){
+                    h1.addEventListener('click', listener);
+                    p.textContent = "시작합니다!!";
+                    isConnect = true;
+                    
+                    // 게임을 시작하면 10초 제한 시간동안 클릭 횟수를 클릭하고
+                    // 제한 시간이 끝나면 gameEnd 함수로 이동한다.
+                    setTimeout(gameEnd, 5000);
+                }
+            })
+
+            // # 끝
+            // 버튼을 클릭 했을 때 연결이 되어 있으면 해제한다.
+            disConnectButton.addEventListener('click', () => {
+                if(isConnect === true){
+                    h1.removeEventListener('click', listener);
+                    p.textContent = "종료합니다!!";
+                    isConnect = false;
+
+                    counter = 0;
+                    h1.textContent = "궁디팡팡 : 0";
+                    result.textContent = "";
+                    // 게임을 종료하면 클릭 횟수를 0으로 바꿔준다.
+
+                    src = "img\\흰바탕.PNG";
+                    result.setAttribute("src", src);
+                    h1.removeEventListener('click', listener);
+                    // 게임을 종료하면 실패인 지 성공인 지를 나타내는 사진도 지워져야 하기 때문에
+                    // src = null과 setArribute를 사용한다.
+                }
+            })
+
+            // # 알림창
+            // 게임 종료 함수
+            const gameEnd = () => {
+                // 제한 시간동안 10번 이상을 눌렀다면 성공
+                if(counter >= 10){
+                    src = "img\\성공.jpg";
+                    // 백슬레시를 하나만 쓰면 \" -> "만 출력되기 때문에
+                    // 백슬레시를 쓰고 싶으면 \\로 표현 해야 한다.
+                    console.log(src)
+                    result.setAttribute("src", src);
+                    // 성공 사진을 img 태그에 setArrtibute를 사용해서 속성을 설정 해준다.
+
+                    h1.removeEventListener("click", listener);
+                    // 게임이 종료되면 더이상 궁디팡팡을 누를 수 없게 해야 하기 때문에
+                    // 이벤트를 종료한다.
+
+                }else{ // 제한 시간동안 50번 미만으로 눌렀다면 실패
+                    src = "img\\실패.jpg";
+                    // 백슬레시를 하나만 쓰면 \" -> "만 출력되기 때문에
+                    // 백슬레시를 쓰고 싶으면 \\로 표현 해야 한다.
+                    result.setAttribute("src", src);
+                    // 실패 사진을 img 태그에 setArrtibute를 사용해서 속성을 설정 해준다.
+
+                    h1.removeEventListener("click", listener)
+                    // 게임이 종료되면 더이상 궁디팡팡을 누를 수 없게 해야 하기 때문에
+                    // 이벤트를 종료한다.
+                }
+            }
+        })
+    </script>
+    <!-- Style -->
+    <style>
+        div{
+            text-align: center;
+            margin-top: 8%;
+            margin-left: 40%;
+            border: 1px solid black;
+            height: 20%;
+            width: 20%;
+            padding: 2%;
+        }
+
+        h1{
+            user-select: none;
+        }
+
+        img{
+            width : 200px;
+            height: 200px;
+            border-color : white;
+        }
+
+        button{
+            border-color : black;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<!-- body -->
+<body>
+    <div>
+        새봄이에게 궁디팡팡을 해주세요
+        <h1>궁디팡팡 : 0</h1>
+        <button id = "connect">시작</button>
+        <button id = "disconnect">끝</button>
+        <p>시작합니다!!</p>
+        <img id=result src="img\\흰바탕.PNG">
+    </div>
+</body>
+</html>
