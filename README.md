@@ -1,4 +1,12 @@
-# <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>할 일 목록 관리 해주는 페이지(이전 기록이 저장되는)</title>
+</head>
+<body>
     <h1>할 일 목록</h1>
     <!-- 입력 창 -->
     <input id="todo">
@@ -113,4 +121,5 @@
             input.value = ""
         })
     })
-</</script각본을 뜨다>>
+</script>
+</html>
