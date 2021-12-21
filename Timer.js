@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 // 사용자 정의 hook
 const useCounter = (initialValue, ms) => {
-  
   const [count, setCount] = useState(initialValue);
+  const [startBtn, setStartBtn] = useState(false);
   const intervalRef = useRef(null);
 
   // ** 시작 **
   const start = useCallback(() => {
-    intervalRef.current = setInterval(() => {
+    setStartBtn(true);
+    intervalRef.current = setInterval(async () => {
       setCount(c => c + 1);
     }, ms);
   }, []);
@@ -18,26 +19,29 @@ const useCounter = (initialValue, ms) => {
     if (intervalRef.current === null) {
       return;
     }
+    setStartBtn(false);
     clearInterval(intervalRef.current);
     initialValue = count;
   }, []);
 
   // ** 끝 **
-  const end = useCallback(()=>{
+  const end = useCallback(() => {
     if (intervalRef.current === null) {
       return;
     }
+    setStartBtn(false);
     clearInterval(intervalRef.current);
     intervalRef.current = null;
+    setCount(0);
   }, []);
 
   // ** 리셋 **
   const reset = useCallback(() => {
     setCount(0);
-    stop();
+    end();
   }, []);
 
-  return { count, start, end, stop, reset };
+  return { count, startBtn, start, end, stop, reset };
 };
 
 export default function SetTimer() {
@@ -45,7 +49,7 @@ export default function SetTimer() {
   const [currentHours, setCurrentHours] = useState(0);
   const [currentMinutes, setCurrentMinutes] = useState(0);
   const [currentSeconds, setCurrentSeconds] = useState(0);
-  const { count, start, end, stop, reset } = useCounter(0, 1000);
+  const { count, startBtn, stopBtn, endBtn, start, end, stop } = useCounter(0, 1000);
 
   // 타이머 기능
   const timer = () => {
@@ -69,11 +73,12 @@ export default function SetTimer() {
         {currentMinutes < 10 ? `0${currentMinutes}` : currentMinutes} :
         {currentSeconds < 10 ? `0${currentSeconds}` : currentSeconds}
       </h1>
-
-      <button onClick={start}>Start</button>
+      <button disabled={startBtn} onClick={start}>
+        Start
+      </button>
       <button onClick={stop}>Stop</button>
       <button onClick={end}>End</button>
-      <button onClick={reset}>Reset</button>
+      {/* <button onClick={reset}>Reset</button> */}
     </>
   );
 }
