@@ -1,38 +1,29 @@
-import React from "react";
+import React, { useRef } from "react";
 
 const { kakao } = window;
 // 스크립트로 kakao maps api를 심어서 가져오면 window 전역 객체에 들어가게 된다.
 // 그리고 그걸 사용하려면 window에서 kakao 객체를 뽑아서 사용하면 된다.
 
-// 나의 현재 위치정보 출력하기
-const MapContainer = props => {
+// 정기적으로 위치 정보 얻기
+const MapContainer2 = props => {
   const [latitude, setLatitude] = React.useState();
   const [longtitude, setLogintitude] = React.useState();
+  const [reload, setReload] = React.useState();
 
   React.useEffect(() => {
-    // 사용자의 실시간 위치 -> 위도, 경도
+    // Geolocation API에 액세스할 수 있는지를 확인
     if (navigator.geolocation) {
-      // GPS 지원 유무에 따른 코드
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setLatitude(position.coords.latitude);
-          setLogintitude(position.coords.longitude);
-        },
-        function (error) {
-          console.error("error", error);
-        },
-        {
-          enableHighAccuracy: false,
-          maximumAge: 0,
-          timeout: Infinity,
-        }
-      );
+      //위치 정보를 정기적으로 얻기
+      navigator.geolocation.watchPosition(function (pos) {
+        setLatitude(pos.coords.latitude);
+        setLogintitude(pos.coords.longitude);
+      });
     } else {
-      alert("GPS를 지원하지 않습니다");
+      alert("이 브라우저에서는 Geolocation이 지원되지 않습니다.");
     }
 
     // 카카오 지도 API 사용
-    const container = document.getElementById("myMap");
+    const container = document.getElementById("myMap2");
     container.style.width = "500px";
     container.style.height = "500px";
 
@@ -59,11 +50,11 @@ const MapContainer = props => {
 
   return (
     <div>
-      <div style={{ margin: "auto" }} id="myMap"></div>
+      <div style={{ margin: "auto" }} id="myMap2"></div>
       <p>위도 : {latitude}</p>
       <p>경도 : {longtitude}</p>
     </div>
   );
 };
 
-export default MapContainer;
+export default MapContainer2;
