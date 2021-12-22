@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 const { kakao } = window;
 // 스크립트로 kakao maps api를 심어서 가져오면 window 전역 객체에 들어가게 된다.
@@ -8,15 +9,23 @@ const { kakao } = window;
 const MapContainer = props => {
   const [latitude, setLatitude] = React.useState();
   const [longtitude, setLogintitude] = React.useState();
+  const history = useHistory();
 
   React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!latitude && !longtitude) {
+        history.push('/container');
+        console.log("1");
+      }
+    }, 500);
+
     // 사용자의 실시간 위치 -> 위도, 경도
     if (navigator.geolocation) {
       // GPS 지원 유무에 따른 코드
       navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setLatitude(position.coords.latitude);
-          setLogintitude(position.coords.longitude);
+        async function (position) {
+          await setLatitude(position.coords.latitude);
+          await setLogintitude(position.coords.longitude);
         },
         function (error) {
           console.error("error", error);
@@ -31,17 +40,15 @@ const MapContainer = props => {
       alert("GPS를 지원하지 않습니다");
     }
 
-    // 카카오 지도 API 사용
-    const container = document.getElementById("myMap");
-    container.style.width = "500px";
-    container.style.height = "500px";
-
     const options = {
       center: new kakao.maps.LatLng(latitude, longtitude),
       level: 1,
     };
-    const map = new kakao.maps.Map(container, options); // 지도를 생성합니다.
 
+    // 카카오 지도 API 사용
+    const container = document.getElementById("myMap");
+
+    const map = new kakao.maps.Map(container, options); // 지도를 생성합니다.
     map.relayout();
 
     // 마커가 표시될 위치입니다
@@ -54,12 +61,21 @@ const MapContainer = props => {
 
     // 마커가 지도 위에 표시 되도록 설정합니다
     marker.setMap(map);
+
+    map.relayout();
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [latitude, longtitude]);
   // useEffect를 이용하여 렌더링 될 때 지도를 띄우는 데, 2번째 인자로 []를 줘서 처음 렌더링 될 때 한번만 띄우게 한다.
 
   return (
     <div>
-      <div style={{ margin: "auto" }} id="myMap"></div>
+      <div
+        style={{ margin: "auto", width: "500px", height: "500px" }}
+        id="myMap"
+      ></div>
       <p>위도 : {latitude}</p>
       <p>경도 : {longtitude}</p>
     </div>

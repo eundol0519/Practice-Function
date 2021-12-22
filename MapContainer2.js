@@ -8,9 +8,16 @@ const { kakao } = window;
 const MapContainer2 = props => {
   const [latitude, setLatitude] = React.useState();
   const [longtitude, setLogintitude] = React.useState();
-  const [reload, setReload] = React.useState();
+  const [load, setLoad] = React.useState(0);
 
   React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!latitude && !longtitude && load === 0) {
+        window.location.reload();
+        console.log("2")
+      }
+    }, 500);
+
     // Geolocation API에 액세스할 수 있는지를 확인
     if (navigator.geolocation) {
       //위치 정보를 정기적으로 얻기
@@ -23,17 +30,13 @@ const MapContainer2 = props => {
     }
 
     // 카카오 지도 API 사용
-    const container = document.getElementById("myMap2");
-    container.style.width = "500px";
-    container.style.height = "500px";
+    const container = document.getElementById("myMap");
 
     const options = {
       center: new kakao.maps.LatLng(latitude, longtitude),
       level: 1,
     };
     const map = new kakao.maps.Map(container, options); // 지도를 생성합니다.
-
-    map.relayout();
 
     // 마커가 표시될 위치입니다
     const markerPosition = new kakao.maps.LatLng(latitude, longtitude);
@@ -45,12 +48,21 @@ const MapContainer2 = props => {
 
     // 마커가 지도 위에 표시 되도록 설정합니다
     marker.setMap(map);
+
+    map.relayout();
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [latitude, longtitude]);
   // useEffect를 이용하여 렌더링 될 때 지도를 띄우는 데, 2번째 인자로 []를 줘서 처음 렌더링 될 때 한번만 띄우게 한다.
 
   return (
     <div>
-      <div style={{ margin: "auto" }} id="myMap2"></div>
+      <div
+        style={{ margin: "auto", width: "500px", height: "500px" }}
+        id="myMap"
+      ></div>
       <p>위도 : {latitude}</p>
       <p>경도 : {longtitude}</p>
     </div>

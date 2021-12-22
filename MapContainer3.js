@@ -10,6 +10,13 @@ const MapContainer3 = props => {
   const [longtitude, setLogintitude] = React.useState();
 
   React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!latitude && !longtitude) {
+        window.location.reload();
+        console.log("3")
+      }
+    }, 500);
+
     // Geolocation API에 액세스할 수 있는지를 확인
     if (navigator.geolocation) {
       //위치 정보를 정기적으로 얻기
@@ -151,6 +158,10 @@ const MapContainer3 = props => {
     }
 
     map.relayout();
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [latitude, longtitude]);
   // useEffect를 이용하여 렌더링 될 때 지도를 띄우는 데, 2번째 인자로 []를 줘서 처음 렌더링 될 때 한번만 띄우게 한다.
 
