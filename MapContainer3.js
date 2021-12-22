@@ -13,7 +13,6 @@ const MapContainer3 = props => {
     const timer = setTimeout(() => {
       if (!latitude && !longtitude) {
         window.location.reload();
-        console.log("3")
       }
     }, 500);
 

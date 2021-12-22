@@ -14,10 +14,10 @@ const MapContainer = props => {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       if (!latitude && !longtitude) {
-        history.push('/container');
+        history.replace('/container');
         console.log("1");
       }
-    }, 500);
+    }, 1000);
 
     // 사용자의 실시간 위치 -> 위도, 경도
     if (navigator.geolocation) {
