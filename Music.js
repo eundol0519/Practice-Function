@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react'
-
-{/* <Music
-urls={[
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-]}
-/> */}
+import music3 from './music/보도블록 위에 내리는 비.MP3';
+import music4 from './music/산 오솔길.MP3';
+import music5 from './music/아스팔트.mp3';
 
 const useMultiAudio = urls => {
+
+  urls={music : [
+    music3,
+    music4,
+    music5,
+  ]}
+
   const [sources] = useState(
-    urls.map(url => {
+    urls.music.map(url => {
       return {
         url,
         audio: new Audio(url),
@@ -19,7 +21,7 @@ const useMultiAudio = urls => {
   )
 
   const [players, setPlayers] = useState(
-    urls.map(url => {
+    urls.music.map(url => {
       return {
         url,
         playing: false,
@@ -44,6 +46,7 @@ const useMultiAudio = urls => {
   useEffect(() => {
     sources.forEach((source, i) => {
       players[i].playing ? source.audio.play() : source.audio.pause()
+      source.audio.volume = 0.2;
     })
   }, [sources, players])
 
