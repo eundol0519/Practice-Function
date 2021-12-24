@@ -1,20 +1,20 @@
 import React from "react";
 
 const Bubble = () => {
-  const style = {area : [], gap : [], rgb : []};
+  const style = { area: [], gap: [], rgb: [] }; // div들을 담고 있는 객체
 
-  const makeColor = () => {
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
+  const makeColor = () => { // 랜덤 색상 추출하는 함수
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
 
-      return `rgb(${r}, ${g}, ${b})`; // rgb color code
-  }
+    return `rgb(${r}, ${g}, ${b})`; // rgb color code
+  };
 
   for (let i = 0; i < 10; i++) {
-    style.area.push(Math.ceil(Math.random() * (100-50) + 40));
-    style.gap.push(Math.ceil(Math.random() * (10-5) + 5));
-    style.rgb.push(makeColor());
+    style.area.push(Math.ceil(Math.random() * (100 - 40) + 40)); // 동그라미
+    style.gap.push(Math.ceil(Math.random() * (10 - 5) + 5)); // 간격
+    style.rgb.push(makeColor()); // 색상
   }
 
   return (
@@ -40,7 +40,6 @@ const Bubble = () => {
                 marginRight: `${style.gap[index]}px`,
                 marginBottom: `-${style.gap[index]}px`,
               }}
-              onClick={()=>{style.check = true}}
             ></p>
           );
         })}
