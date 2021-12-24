@@ -21,8 +21,9 @@ const Bubble = () => {
     <div>
       <div
         style={{
-          width: "15%",
+          width: "23%",
           flexWrap: "wrap",
+          display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -37,7 +38,9 @@ const Bubble = () => {
                 backgroundColor: `${style.rgb[index]}`,
                 borderRadius: "50%",
                 marginRight: `${style.gap[index]}px`,
+                marginBottom: `-${style.gap[index]}px`,
               }}
+              onClick={()=>{style.check = true}}
             ></p>
           );
         })}
