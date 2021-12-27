@@ -7,6 +7,7 @@ const AudioRecord = () => {
   const [source, setSource] = useState();
   const [analyser, setAnalyser] = useState();
   const [audioUrl, setAudioUrl] = useState();
+  const [sound, setSound] = useState();
 
   const onRecAudio = () => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
@@ -23,7 +24,7 @@ const AudioRecord = () => {
       analyser.connect(audioCtx.destination);
     }
     // 마이크 사용 권한 획득
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorder.start();
       setStream(stream);
@@ -52,7 +53,7 @@ const AudioRecord = () => {
     });
   };
 
-  // 사용자가 음성 녹음을 중지했을 때
+  // 사용자가 음성 녹음을 중지 했을 때
   const offRecAudio = () => {
     // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
     media.ondataavailable = function (e) {
@@ -74,17 +75,28 @@ const AudioRecord = () => {
 
   const onSubmitAudioFile = useCallback(() => {
     if (audioUrl) {
-      console.log(URL.createObjectURL(audioUrl)); // 출력된 링크에서 녹음된 오디오 확인 가능
+      setSound(URL.createObjectURL(audioUrl)); // 출력된 링크에서 녹음된 오디오 확인 가능
     }
     // File 생성자를 사용해 파일로 변환
-    const sound = new File([audioUrl], "soundBlob", { lastModified: new Date().getTime(), type: "audio" });
+    const sound = new File([audioUrl], "soundBlob", {
+      lastModified: new Date().getTime(),
+      type: "audio",
+    });
     console.log(sound); // File 정보 출력
   }, [audioUrl]);
+
+  const play = ()=>{
+    const audio = new Audio(sound);
+    audio.loop = false;
+    audio.volume = 1;
+    audio.play();
+  }
 
   return (
     <>
       <button onClick={onRec ? onRecAudio : offRecAudio}>녹음</button>
       <button onClick={onSubmitAudioFile}>결과 확인</button>
+      <button onClick={play}>재생</button>
     </>
   );
 };
